@@ -27,6 +27,8 @@ class LibraryMockTest {
     @Mock ILoanHelper mockLoanHelper;
     
     @Mock IPatron mockPatron;
+    @Mock IBook mockBook;
+    @Mock ILoan mockLoan;
     
     @InjectMocks
     Library library;
@@ -41,7 +43,7 @@ class LibraryMockTest {
 
     @BeforeEach
     void setUp() throws Exception {
-        //patron =
+        
     }
 
     @AfterEach
@@ -69,4 +71,24 @@ class LibraryMockTest {
         assertTrue(plist.size() == 1);
     }
 
-}
+
+
+    @Test
+    void testCommitLoan() {
+    
+        //Arrange
+        int bookId = 1;
+        when(mockLoan.getBook()).thenReturn(mockBook);
+        when(mockBook.getId()).thenReturn(1);
+        when(mockLoan.getPatron()).thenReturn(mockPatron);
+        
+        //Act
+        library.commitLoan(mockLoan);
+           
+        //Asserts
+        verify(mockLoan).commit(anyInt(), any());
+        ILoan loan = library.getCurrentLoanByBookId(bookId);
+        assertEquals(loan, mockLoan);
+          
+        }
+    }
