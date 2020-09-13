@@ -65,3 +65,4 @@ local.properties
 
 # App created files
 library.obj
+/testbin/
