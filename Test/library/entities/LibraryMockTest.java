@@ -15,6 +15,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import library.entities.ILibrary;
 import library.entities.helpers.IBookHelper;
 import library.entities.helpers.ILoanHelper;
 import library.entities.helpers.IPatronHelper;
@@ -71,7 +72,21 @@ class LibraryMockTest {
         assertTrue(plist.size() == 1);
     }
 
-
+    @Test
+    void testPatronCanBorrowWhenLoanIsOverDue() {
+        
+        //arrange
+        int numOfLoans = ILibrary.LOAN_LIMIT - 1;
+        
+        
+        when(mockPatron.getNumberOfCurrentLoans()).thenReturn(numOfLoans);
+        
+        //act
+        
+        // assert
+        
+    }
+    
 
     @Test
     void testCommitLoan() {
