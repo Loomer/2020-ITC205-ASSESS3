@@ -79,7 +79,7 @@ class LibraryMockTest {
         //Arrange
         int bookId = 1;
         when(mockLoan.getBook()).thenReturn(mockBook);
-        when(mockBook.getId()).thenReturn(1);
+        when(mockBook.getId()).thenReturn(bookId);
         when(mockLoan.getPatron()).thenReturn(mockPatron);
         
         //Act
