@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import library.entities.ILibrary;
@@ -51,6 +52,8 @@ class LibraryMockTest {
     void tearDown() throws Exception {
     }
 
+    
+    // Test 1
     @Test
     void testPatronCanBorrowNormalFlow() {
         
@@ -99,9 +102,9 @@ class LibraryMockTest {
         double finesOwed = ILibrary.MAX_FINES_OWED - 1;
         boolean hasODLoans = false;
         
-        when(mockPatron.getNumberOfCurrentLoans()).thenReturn(numOfLoans);
-        when(mockPatron.getFinesPayable()).thenReturn(finesOwed);
-        when(mockPatron.hasOverDueLoans()).thenReturn(hasODLoans);
+        Mockito.lenient().when(mockPatron.getNumberOfCurrentLoans()).thenReturn(numOfLoans);
+        Mockito.lenient().when(mockPatron.getFinesPayable()).thenReturn(finesOwed);
+        Mockito.lenient().when(mockPatron.hasOverDueLoans()).thenReturn(hasODLoans);
                 
         // act
         boolean canBorrow = library.patronCanBorrow(mockPatron);
@@ -116,13 +119,14 @@ class LibraryMockTest {
         
         // arrange
         int numOfLoans = ILibrary.LOAN_LIMIT - 1;
+        //System.out.println(ILibrary.LOAN_LIMIT + " " + numOfLoans);
         double finesOwed = ILibrary.MAX_FINES_OWED + 1;
         boolean hasODLoans = false;
         
         
-        when(mockPatron.getNumberOfCurrentLoans()).thenReturn(numOfLoans);
-        when(mockPatron.getFinesPayable()).thenReturn(finesOwed);
-        when(mockPatron.hasOverDueLoans()).thenReturn(hasODLoans);
+        Mockito.lenient().when(mockPatron.getNumberOfCurrentLoans()).thenReturn(numOfLoans);
+        Mockito.lenient().when(mockPatron.getFinesPayable()).thenReturn(finesOwed);
+        Mockito.lenient().when(mockPatron.hasOverDueLoans()).thenReturn(hasODLoans);
                 
         // act
         boolean canBorrow = library.patronCanBorrow(mockPatron);
