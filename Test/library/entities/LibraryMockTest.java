@@ -53,7 +53,7 @@ class LibraryMockTest {
     }
 
     
-    // Test 1
+    
     @Test
     void testPatronCanBorrowNormalFlow() {
         
@@ -72,7 +72,6 @@ class LibraryMockTest {
         // assert
         assertTrue(canBorrow);
     }
-    
     
     @Test
     void testPatronCanBorrowWhenLoanIsOverDue() {
@@ -119,7 +118,6 @@ class LibraryMockTest {
         
         // arrange
         int numOfLoans = ILibrary.LOAN_LIMIT - 1;
-        //System.out.println(ILibrary.LOAN_LIMIT + " " + numOfLoans);
         double finesOwed = ILibrary.MAX_FINES_OWED + 1;
         boolean hasODLoans = false;
         
@@ -135,8 +133,11 @@ class LibraryMockTest {
         assertFalse(canBorrow);
     }
     
+    
+    
+    // passed
     @Test
-    void testCommitLoan() {
+    void testCommitLoanIfLoanAddedToCurrentLoanList() {
     
         //Arrange
         int bookId = 1;
@@ -153,4 +154,39 @@ class LibraryMockTest {
         assertEquals(loan, mockLoan);
           
         }
+    
+    // failed
+    @Test
+    void testCommitLoanIfLoanAddedToMemberBorrowingRecord() {
+    
+        //Arrange
+        int bookId = 1;
+        when(mockLoan.getBook()).thenReturn(mockBook);
+        when(mockBook.getId()).thenReturn(bookId);
+        when(mockLoan.getPatron()).thenReturn(mockPatron);
+        
+        //Act
+        library.commitLoan(mockLoan);
+           
+        //Asserts
+        assertTrue(mockPatron.getLoans().contains(mockLoan));
+                  
+        }
+    
+    @Test
+    void testCommitLoanIfLoanAddedToMemberBorrowingRecord111111111() {
+    
+        //Arrange
+        int bookId = 1;
+        when(mockLoan.getBook()).thenReturn(mockBook);
+        when(mockBook.getId()).thenReturn(bookId);
+        when(mockLoan.getPatron()).thenReturn(mockPatron);
+        
+        //Act
+        library.commitLoan(mockLoan);
+           
+        //Asserts
+        assertTrue(mockPatron.getLoans().contains(mockLoan));
+                  
+        }    
     }
