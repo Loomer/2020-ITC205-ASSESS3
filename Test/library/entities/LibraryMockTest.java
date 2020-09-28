@@ -52,42 +52,85 @@ class LibraryMockTest {
     }
 
     @Test
-    void testLibraryAllParamsOK() {
+    void testPatronCanBorrowNormalFlow() {
         
-        //arrange
-        String ln = "Smith";
-        String fn = "John";
-        String email = "jsmith@phaykmail.com";
-        long phNum = 1234567890;
-        int id = 1;
+        // arrange
+        int numOfLoans = ILibrary.LOAN_LIMIT - 1;
+        double finesOwed = ILibrary.MAX_FINES_OWED - 1;
+        boolean hasODLoans = false;
         
-        when(mockPatronHelper.makePatron(ln, fn, email, phNum, id)).thenReturn(mockPatron);
-        
-        //act
-        IPatron patron = library.addPatron(ln, fn, email, phNum);
+        when(mockPatron.getNumberOfCurrentLoans()).thenReturn(numOfLoans);
+        when(mockPatron.getFinesPayable()).thenReturn(finesOwed);
+        when(mockPatron.hasOverDueLoans()).thenReturn(hasODLoans);
+                
+        // act
+        boolean canBorrow = library.patronCanBorrow(mockPatron);
         
         // assert
-        assertNotNull(patron);
-        List<IPatron> plist = library.getPatronList();
-        assertTrue(plist.size() == 1);
+        assertTrue(canBorrow);
     }
-
+    
+    
     @Test
     void testPatronCanBorrowWhenLoanIsOverDue() {
         
-        //arrange
+        // arrange
         int numOfLoans = ILibrary.LOAN_LIMIT - 1;
-        
+        double finesOwed = ILibrary.MAX_FINES_OWED - 1;
+        boolean hasODLoans = true;
         
         when(mockPatron.getNumberOfCurrentLoans()).thenReturn(numOfLoans);
-        
-        //act
+        when(mockPatron.getFinesPayable()).thenReturn(finesOwed);
+        when(mockPatron.hasOverDueLoans()).thenReturn(hasODLoans);
+                
+        // act
+        boolean canBorrow = library.patronCanBorrow(mockPatron);
         
         // assert
+        assertFalse(canBorrow);
+        assertTrue(3 > ILibrary.LOAN_LIMIT);
+    }
+    
+    @Test
+    void testPatronCanBorrowWhenLoanLimitReached() {
+        
+        // arrange
+        int numOfLoans = ILibrary.LOAN_LIMIT + 1;
+        double finesOwed = ILibrary.MAX_FINES_OWED - 1;
+        boolean hasODLoans = false;
+        
+        when(mockPatron.getNumberOfCurrentLoans()).thenReturn(numOfLoans);
+        when(mockPatron.getFinesPayable()).thenReturn(finesOwed);
+        when(mockPatron.hasOverDueLoans()).thenReturn(hasODLoans);
+                
+        // act
+        boolean canBorrow = library.patronCanBorrow(mockPatron);
+        
+        // assert
+        assertFalse(canBorrow);
         
     }
     
-
+    @Test
+    void testPatronCanBorrowWhenMaxFinesOwed() {
+        
+        // arrange
+        int numOfLoans = ILibrary.LOAN_LIMIT - 1;
+        double finesOwed = ILibrary.MAX_FINES_OWED + 1;
+        boolean hasODLoans = false;
+        
+        
+        when(mockPatron.getNumberOfCurrentLoans()).thenReturn(numOfLoans);
+        when(mockPatron.getFinesPayable()).thenReturn(finesOwed);
+        when(mockPatron.hasOverDueLoans()).thenReturn(hasODLoans);
+                
+        // act
+        boolean canBorrow = library.patronCanBorrow(mockPatron);
+        
+        // assert
+        assertFalse(canBorrow);
+    }
+    
     @Test
     void testCommitLoan() {
     
