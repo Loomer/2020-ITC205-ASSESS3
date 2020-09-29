@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.util.List;
+import java.util.Map;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -14,15 +15,18 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import library.entities.ILibrary;
+import library.entities.ILoan.LoanState;
 import library.entities.helpers.IBookHelper;
 import library.entities.helpers.ILoanHelper;
 import library.entities.helpers.IPatronHelper;
 
 @ExtendWith(MockitoExtension.class)
 class LibraryMockTest {
+    
     
     @Mock IBookHelper mockBookHelper;
     @Mock IPatronHelper mockPatronHelper;
@@ -31,6 +35,8 @@ class LibraryMockTest {
     @Mock IPatron mockPatron;
     @Mock IBook mockBook;
     @Mock ILoan mockLoan;
+    
+    @Spy Map<Integer, ILoan> loans;
     
     @InjectMocks
     Library library;
@@ -74,7 +80,7 @@ class LibraryMockTest {
     }
     
     @Test
-    void testPatronCanBorrowWhenLoanIsOverDue() {
+    void testPatronCanBorrowWhenHasLoanIsOverDue() {
         
         // arrange
         int numOfLoans = ILibrary.LOAN_LIMIT - 1;
@@ -90,7 +96,6 @@ class LibraryMockTest {
         
         // assert
         assertFalse(canBorrow);
-        assertTrue(3 > ILibrary.LOAN_LIMIT);
     }
     
     @Test
@@ -114,7 +119,7 @@ class LibraryMockTest {
     }
     
     @Test
-    void testPatronCanBorrowWhenMaxFinesOwed() {
+    void testPatronCanBorrowWhenMaxFinesOwedExceed() {
         
         // arrange
         int numOfLoans = ILibrary.LOAN_LIMIT - 1;
@@ -133,6 +138,25 @@ class LibraryMockTest {
         assertFalse(canBorrow);
     }
     
+    @Test
+    void testPatronCanBorrowWhenMaxFinesOwedEquals() {
+        
+        // arrange
+        int numOfLoans = ILibrary.LOAN_LIMIT - 1;
+        double finesOwed = ILibrary.MAX_FINES_OWED;
+        boolean hasODLoans = false;
+        
+        
+        Mockito.lenient().when(mockPatron.getNumberOfCurrentLoans()).thenReturn(numOfLoans);
+        Mockito.lenient().when(mockPatron.getFinesPayable()).thenReturn(finesOwed);
+        Mockito.lenient().when(mockPatron.hasOverDueLoans()).thenReturn(hasODLoans);
+                
+        // act
+        boolean canBorrow = library.patronCanBorrow(mockPatron);
+        
+        // assert
+        assertFalse(canBorrow);
+    }
     
     
     // passed
@@ -149,7 +173,6 @@ class LibraryMockTest {
         library.commitLoan(mockLoan);
            
         //Asserts
-        verify(mockLoan).commit(anyInt(), any());
         ILoan loan = library.getCurrentLoanByBookId(bookId);
         assertEquals(loan, mockLoan);
           
@@ -167,14 +190,16 @@ class LibraryMockTest {
         
         //Act
         library.commitLoan(mockLoan);
-           
+        
         //Asserts
-        assertTrue(mockPatron.getLoans().contains(mockLoan));
+        ILoan loan = loans.get(bookId);
+        assertEquals(loan, mockLoan);
                   
         }
     
+    // failed
     @Test
-    void testCommitLoanIfLoanAddedToMemberBorrowingRecord111111111() {
+    void testCommitLoanIfBookStateIsOnLoan() {
     
         //Arrange
         int bookId = 1;
@@ -186,7 +211,9 @@ class LibraryMockTest {
         library.commitLoan(mockLoan);
            
         //Asserts
-        assertTrue(mockPatron.getLoans().contains(mockLoan));
-                  
-        }    
+        assertTrue(library.getCurrentLoanByBookId(bookId).getBook().isOnLoan());
+                          
+        }
+
+
     }
