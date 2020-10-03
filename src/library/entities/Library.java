@@ -17,12 +17,12 @@ public class Library implements Serializable, ILibrary {
 	
     private int currentlyIssuingBookId;
     private int currentlyIssuingPatronId;
-    private int currentlyIssuingLoanId;
+    int currentlyIssuingLoanId;
 	
     private Map<Integer, IBook> catalog;
     private Map<Integer, IPatron> patrons;
-    private Map<Integer, ILoan> loans;
-    private Map<Integer, ILoan> currentLoans;
+    Map<Integer, ILoan> loans;
+    Map<Integer, ILoan> currentLoans;
     private Map<Integer, IBook> damagedBooks;
     
     private IBookHelper bookHelper;
