@@ -84,10 +84,11 @@ class LibraryCommitLoanTest {
         
         // Act
         library.commitLoan(mockLoan);
-           
+        Integer key = library.currentlyIssuingLoanId - 1;
+        
         // Asserts
         assertFalse(library.loans.isEmpty());
-        assertEquals(library.loans.get(1), mockLoan);
+        assertEquals(library.loans.get(key), mockLoan);
           
         }
 }
