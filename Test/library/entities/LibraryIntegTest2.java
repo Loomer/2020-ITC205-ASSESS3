@@ -35,6 +35,7 @@ class LibraryIntegTest2 {
     Patron patron;
     Book book;
     Loan loan;
+    Library library;
     
     @BeforeEach
     void setUp() throws Exception {
@@ -62,11 +63,11 @@ class LibraryIntegTest2 {
         int loanId = 1;
         Date dueDate = new Date();
         dueDate.setTime(1532516399);
-        //Executable e = () -> loan.commit(loanId, dueDate);
+        Executable e = () -> loan.commit(loanId, dueDate);
         loan.commit(loanId, dueDate);
-        
+                
         //Asserts
-        //assertThrows(RuntimeException.class, e);
+        assertThrows(RuntimeException.class, e);
         assertFalse(patron.loans.isEmpty());
                           
         }
