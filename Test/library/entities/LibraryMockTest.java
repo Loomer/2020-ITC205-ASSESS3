@@ -3,7 +3,6 @@ package library.entities;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import java.util.List;
 import java.util.Map;
 
 import org.junit.jupiter.api.AfterAll;
@@ -19,7 +18,6 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import library.entities.ILibrary;
-import library.entities.ILoan.LoanState;
 import library.entities.helpers.IBookHelper;
 import library.entities.helpers.ILoanHelper;
 import library.entities.helpers.IPatronHelper;
@@ -36,10 +34,13 @@ class LibraryMockTest {
     @Mock IBook mockBook;
     @Mock ILoan mockLoan;
     
-    @Spy Map<Integer, ILoan> loans;
-    
+    //@Spy Map<Integer, ILoan> loans;
+   
     @InjectMocks
     Library library;
+    
+    
+    
     
     @BeforeAll
     static void setUpBeforeClass() throws Exception {
@@ -188,15 +189,20 @@ class LibraryMockTest {
         when(mockBook.getId()).thenReturn(bookId);
         when(mockLoan.getPatron()).thenReturn(mockPatron);
         
+                
+        
         //Act
         library.commitLoan(mockLoan);
         
         //Asserts
-        ILoan loan = loans.get(bookId);
-        assertEquals(loan, mockLoan);
-                  
+        ILoan loan = mockLoan;
+        verify(mockLoan).commit(anyInt(), any());
+        //verify(mockPatron).takeOutLoan(any());
+                          
         }
     
+    
+
     // failed
     @Test
     void testCommitLoanIfBookStateIsOnLoan() {
