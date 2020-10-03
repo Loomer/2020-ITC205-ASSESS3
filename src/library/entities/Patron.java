@@ -8,16 +8,16 @@ import java.util.Map;
 @SuppressWarnings("serial")
 public class Patron implements Serializable, IPatron {
 
-    private String lastName;
-    private String firstName;
-    private String emailAddress;
-    private long phoneNumber;
-    private int id;
-    private double finesPayable;
+    String lastName;
+    String firstName;
+    String emailAddress;
+    long phoneNumber;
+    int id;
+    double finesPayable;
     
-    private PatronState state;
+    PatronState state;
 
-    private Map<Integer, ILoan> loans;
+    Map<Integer, ILoan> loans;
 
 
     public Patron(String lastName, String firstName, String email, long phoneNo, int id) {
