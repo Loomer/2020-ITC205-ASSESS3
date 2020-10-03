@@ -6,13 +6,11 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.function.Executable;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -87,7 +85,6 @@ class LibraryCommitLoanTest {
         Integer key = library.currentlyIssuingLoanId - 1;
         
         // Asserts
-        assertFalse(library.loans.isEmpty());
         assertEquals(library.loans.get(key), mockLoan);
           
         }
