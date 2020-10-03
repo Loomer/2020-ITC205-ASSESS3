@@ -1,37 +1,18 @@
 package library.entities;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.*;
 
 import java.util.Date;
-import java.util.Map;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.function.Executable;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
-import org.mockito.Spy;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import library.entities.IBook.BookState;
-import library.entities.ILibrary;
 import library.entities.ILoan.LoanState;
 import library.entities.IPatron.PatronState;
-import library.entities.helpers.IBookHelper;
-import library.entities.helpers.ILoanHelper;
-import library.entities.helpers.IPatronHelper;
 
-@ExtendWith(MockitoExtension.class)
+
 class LibraryCommitLoanIntegrationTest {
 
     Patron patron;
