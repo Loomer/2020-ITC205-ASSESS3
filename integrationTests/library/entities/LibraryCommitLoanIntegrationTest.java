@@ -18,7 +18,6 @@ class LibraryCommitLoanIntegrationTest {
     Patron patron;
     Book book;
     Loan loan;
-    Library library;
     
     @BeforeEach
     void setUp() throws Exception {
@@ -185,7 +184,7 @@ class LibraryCommitLoanIntegrationTest {
     }
     
     @Test
-    void commitLoanIntegration_hasValidLoan_LoanStateIsCurrent() {
+    void commitLoanIntegration_hasValidLoan_LoanStateIsUpdatedToCurrent() {
         
         // Arrange
         patron = new Patron("Smith", "Jane", "jsmith@phaykmail.com", 1L, 1);

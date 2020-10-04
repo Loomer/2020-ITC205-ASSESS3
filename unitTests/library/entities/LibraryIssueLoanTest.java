@@ -30,10 +30,10 @@ class LibraryIssueLoanTest {
     void issueLoan_NullBook_ExceptionThrown() {
         
         // Arrange
-        mockBook = null;              
+                      
         
         // Act
-        Executable e = () -> library.issueLoan(mockBook, mockPatron);
+        Executable e = () -> library.issueLoan(null, mockPatron);
         
         // Asserts
         assertThrows(RuntimeException.class, e);
@@ -43,10 +43,10 @@ class LibraryIssueLoanTest {
     void issueLoan_NullPatron_ExceptionThrown() {
         
         // Arrange
-        mockPatron = null;  
+       
         
         // Act
-        Executable e = () -> library.issueLoan(mockBook, mockPatron);
+        Executable e = () -> library.issueLoan(mockBook, null);
         
         // Asserts
         assertThrows(RuntimeException.class, e);

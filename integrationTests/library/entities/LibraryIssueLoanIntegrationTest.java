@@ -10,9 +10,13 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
+import library.entities.IBook.BookState;
+import library.entities.ILoan.LoanState;
+import library.entities.IPatron.PatronState;
 import library.entities.helpers.*;
 
 class LibraryIssueLoanIntegrationTest {
@@ -41,10 +45,6 @@ class LibraryIssueLoanIntegrationTest {
         loanHelper = new LoanHelper();
     }
 
-    @AfterAll
-    static void tearDownAfterClass() throws Exception {
-    }
-
     @BeforeEach
     void setUp() throws Exception {
         
@@ -69,22 +69,57 @@ class LibraryIssueLoanIntegrationTest {
         library.damagedBooks = damagedBooks;
     }
 
-    @AfterEach
-    void tearDown() throws Exception {
-    }
-
-        @Test
-    void test() {
+    @Test
+    void issueLoanIntegration_HappyDay() {
         
         // Arrange
-        ILoan expectedLoan = new Loan(book, patron);
-        
+        book.state = BookState.AVAILABLE;
+        patron.state = PatronState.CAN_BORROW;
+             
         // Act
-        ILoan actualLoan = library.issueLoan(book, patron);
-                
+        ILoan loan = library.issueLoan(book, patron);
+        
+                        
         // Asserts
-        assertEquals(expectedLoan, actualLoan);
+        assertEquals(book, loan.getBook());
+        assertEquals(patron, loan.getPatron());
+        assertTrue(library.currentLoans.size() == 0);
+        assertTrue(library.loans.size() == 0);
+        
         
     }
 
+    @Test
+    void issueLoanIntegration_PatronRestricted_ExceptionThrown() {
+        
+        // Arrange
+        book.state = BookState.AVAILABLE;
+        patron.state = PatronState.RESTRICTED;
+             
+        // Act
+        Executable e = () -> library.issueLoan(book, patron);
+                
+        // Asserts
+        assertThrows(RuntimeException.class, e);
+        assertTrue(library.currentLoans.size() == 0);
+        assertTrue(library.loans.size() == 0);
+        
+    }
+
+    @Test
+    void issueLoanIntegration_BookDamaged_ExceptionThrown() {
+        
+        // Arrange
+        book.state = BookState.DAMAGED;
+        patron.state = PatronState.RESTRICTED;
+             
+        // Act
+        Executable e = () -> library.issueLoan(book, patron);
+                
+        // Asserts
+        assertThrows(RuntimeException.class, e);
+        assertTrue(library.currentLoans.size() == 0);
+        assertTrue(library.loans.size() == 0);
+        
+    }
 }
