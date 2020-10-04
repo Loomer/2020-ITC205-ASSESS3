@@ -31,8 +31,8 @@ class LibraryIssueLoanTest {
         
         // Arrange
         mockBook = null;              
-        // Act
         
+        // Act
         Executable e = () -> library.issueLoan(mockBook, mockPatron);
         
         // Asserts
@@ -46,7 +46,6 @@ class LibraryIssueLoanTest {
         mockPatron = null;  
         
         // Act
-        
         Executable e = () -> library.issueLoan(mockBook, mockPatron);
         
         // Asserts

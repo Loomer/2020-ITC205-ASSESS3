@@ -131,8 +131,7 @@ class LibraryCommitLoanIntegrationTest {
         assertThrows(RuntimeException.class, e);
             
     }
-      
-    
+          
     @Test
     void commitLoanIntegration_BookStateOnLoan_ExceptionThrown() {
         
@@ -149,7 +148,6 @@ class LibraryCommitLoanIntegrationTest {
             assertThrows(RuntimeException.class, e);
             
     }
- 
     
     @Test
     void commitLoanIntegration_hasValidLoan_LoanAddedToMemberBorrowingRecord() {
