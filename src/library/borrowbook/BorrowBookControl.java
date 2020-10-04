@@ -9,14 +9,14 @@ import library.entities.IPatron;
 
 public class BorrowBookControl implements IBorrowBookControl {
 	
-    private IBorrowBookUI borrowBookUI;
+    IBorrowBookUI borrowBookUI;
 	
-    private ILibrary library;
-    private IPatron currentPatron;
-    private BorrowControlState controlState;
+    ILibrary library;
+    IPatron currentPatron;
+    BorrowControlState controlState;
 	
-    private List<ILoan> pendingLoans;
-    private IBook currentBook;
+    List<ILoan> pendingLoans;
+    IBook currentBook;
     
 	
     public BorrowBookControl(ILibrary library) {

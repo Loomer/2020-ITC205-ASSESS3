@@ -19,15 +19,15 @@ public class Library implements Serializable, ILibrary {
     private int currentlyIssuingPatronId;
     int currentlyIssuingLoanId;
 	
-    Map<Integer, IBook> catalog;
-    Map<Integer, IPatron> patrons;
-    Map<Integer, ILoan> loans;
-    Map<Integer, ILoan> currentLoans;
-    Map<Integer, IBook> damagedBooks;
+    public Map<Integer, IBook> catalog;
+    public Map<Integer, IPatron> patrons;
+    public Map<Integer, ILoan> loans;
+    public Map<Integer, ILoan> currentLoans;
+    public Map<Integer, IBook> damagedBooks;
     
-    IBookHelper bookHelper;
-    IPatronHelper patronHelper;
-    ILoanHelper loanHelper;
+    public IBookHelper bookHelper;
+    public IPatronHelper patronHelper;
+    public ILoanHelper loanHelper;
 	
 
     public Library(IBookHelper bookHelper, IPatronHelper patronHelper, ILoanHelper loanHelper) {
