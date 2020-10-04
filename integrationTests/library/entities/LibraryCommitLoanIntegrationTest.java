@@ -144,7 +144,7 @@ class LibraryCommitLoanIntegrationTest {
         Executable e = () -> loan.commit(1, new Date(1532516399));
                 
         // Asserts
-            assertThrows(RuntimeException.class, e);
+        assertThrows(RuntimeException.class, e);
             
     }
     
