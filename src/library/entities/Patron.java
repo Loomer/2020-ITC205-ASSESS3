@@ -13,9 +13,9 @@ public class Patron implements Serializable, IPatron {
     String emailAddress;
     long phoneNumber;
     int id;
-    double finesPayable;
+    public double finesPayable;
     
-    PatronState state;
+    public PatronState state;
 
     Map<Integer, ILoan> loans;
 

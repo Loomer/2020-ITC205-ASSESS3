@@ -4,8 +4,8 @@ import java.util.Scanner;
 
 public class BorrowBookUI implements IBorrowBookUI {
 	
-    private IBorrowBookControl borrowBookControl;
-    private Scanner input;
+    IBorrowBookControl borrowBookControl;
+    Scanner input;
     public BorrowUIState uiState;
 
 	
