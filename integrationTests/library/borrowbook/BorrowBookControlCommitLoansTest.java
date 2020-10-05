@@ -17,8 +17,10 @@ import library.borrowbook.IBorrowBookControl.BorrowControlState;
 import library.borrowbook.IBorrowBookUI.BorrowUIState;
 import library.entities.Book;
 import library.entities.IBook;
+import library.entities.IBook.BookState;
 import library.entities.ILibrary;
 import library.entities.ILoan;
+import library.entities.ILoan.LoanState;
 import library.entities.IPatron;
 import library.entities.Library;
 import library.entities.Loan;
@@ -41,9 +43,9 @@ class BorrowBookControlCommitLoansTest {
     static IBookHelper bookHelper;
     static IPatronHelper patronHelper;
     static ILoanHelper loanHelper;
-    Book book;
+    Book book; Book bookTwo;
     Patron patron;
-    Loan Loan;  
+    
     
     
     BorrowBookControl borrowBookControl; IBorrowBookControl iBorrowBookControl;
@@ -70,7 +72,8 @@ class BorrowBookControlCommitLoansTest {
     void setUp() throws Exception {
         
         patron = new Patron("Smith", "Jane", "jsmith@phaykmail.com", 1L, 1);
-        book = new Book("John Doe", "A Book Vol.1", "callNum1", 1);
+        book = new Book("John Doe", "Some Book Vol.1", "callNum1", 1);
+        bookTwo = new Book("Jane Doe", "Some Book Vol.2", "callNum2", 2);
                 
         catalog = new HashMap<>();
         patrons = new HashMap<>();
@@ -94,6 +97,7 @@ class BorrowBookControlCommitLoansTest {
         
         borrowBookControl = new BorrowBookControl(iLibrary);
         //borrowBookControl.controlState = controlState.INITIALISED;
+        borrowBookControl.pendingLoans = pendingLoans;
         
         iBorrowBookControl = borrowBookControl;
         
@@ -105,3 +109,57 @@ class BorrowBookControlCommitLoansTest {
         
         
     }
+    
+    @Test
+    void commitLoans_HappyDay_UIAndCtrlStateCompleted() {
+        
+        // Arrange
+        borrowBookControl.controlState = BorrowControlState.FINALISING;
+        borrowBookUI.uiState = BorrowUIState.FINALISING;
+        borrowBookControl.currentPatron = patron;
+        book.state = BookState.AVAILABLE; bookTwo.state = BookState.AVAILABLE;
+        Loan loan = new Loan(book, patron);
+        Loan loanTwo = new Loan(bookTwo, patron);
+        ILoan iLoan = loan; 
+        ILoan iLoanTwo = loanTwo;
+        borrowBookControl.pendingLoans.add(iLoan);
+        borrowBookControl.pendingLoans.add(iLoanTwo);
+        
+        
+        // Act
+        borrowBookControl.commitLoans();
+        
+        // Asserts
+        assertEquals(BorrowControlState.COMPLETED, borrowBookControl.controlState);
+        assertEquals(BorrowUIState.COMPLETED, borrowBookUI.uiState);
+        
+        assertFalse(library.currentLoans.isEmpty());
+        assertTrue(library.currentLoans.containsKey(book.getId()));
+        assertTrue(library.currentLoans.containsKey(bookTwo.getId()));
+        
+        assertFalse(library.loans.isEmpty());
+        assertTrue(library.loans.containsValue(loan));
+        assertTrue(library.loans.containsValue(loanTwo));
+        assertTrue(library.loans.containsKey(library.currentlyIssuingLoanId - 2));
+        assertTrue(library.loans.containsKey(library.currentlyIssuingLoanId - 1));
+       
+        assertFalse(patron.loans.isEmpty());
+        assertTrue(patron.loans.containsValue(loan));
+        assertTrue(patron.loans.containsValue(loanTwo));
+        assertTrue(patron.loans.containsKey(library.currentlyIssuingLoanId - 2));
+        assertTrue(patron.loans.containsKey(library.currentlyIssuingLoanId - 1));
+      
+        assertEquals(LoanState.CURRENT, loan.state);
+        assertEquals(LoanState.CURRENT, loanTwo.state);
+        
+        assertEquals(BookState.ON_LOAN, book.state);
+        assertEquals(BookState.ON_LOAN, bookTwo.state);
+        
+        
+        
+        
+        
+        
+        
+    }
+}

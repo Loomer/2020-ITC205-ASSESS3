@@ -10,7 +10,7 @@ public class Loan implements Serializable, ILoan {
     IBook book;
     IPatron patron;
     Date dueDate;
-    LoanState state;
+    public LoanState state;
 
     
     public Loan(IBook book, IPatron patron) {
