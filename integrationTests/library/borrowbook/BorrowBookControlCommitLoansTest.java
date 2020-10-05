@@ -12,6 +12,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 
 import library.borrowbook.IBorrowBookControl.BorrowControlState;
 import library.borrowbook.IBorrowBookUI.BorrowUIState;
@@ -132,34 +133,259 @@ class BorrowBookControlCommitLoansTest {
         // Asserts
         assertEquals(BorrowControlState.COMPLETED, borrowBookControl.controlState);
         assertEquals(BorrowUIState.COMPLETED, borrowBookUI.uiState);
+    }
+    
+    @Test
+    void commitLoans_HappyDay_LoansAddedToCurrentLoanList() {
         
+        // Arrange
+        borrowBookControl.controlState = BorrowControlState.FINALISING;
+        borrowBookUI.uiState = BorrowUIState.FINALISING;
+        borrowBookControl.currentPatron = patron;
+        book.state = BookState.AVAILABLE; bookTwo.state = BookState.AVAILABLE;
+        Loan loan = new Loan(book, patron);
+        Loan loanTwo = new Loan(bookTwo, patron);
+        ILoan iLoan = loan; 
+        ILoan iLoanTwo = loanTwo;
+        borrowBookControl.pendingLoans.add(iLoan);
+        borrowBookControl.pendingLoans.add(iLoanTwo);
+        
+        
+        // Act
+        borrowBookControl.commitLoans();
+        
+        // Asserts
         assertFalse(library.currentLoans.isEmpty());
         assertTrue(library.currentLoans.containsKey(book.getId()));
         assertTrue(library.currentLoans.containsKey(bookTwo.getId()));
+    }
+
+    @Test
+    void commitLoans_HappyDay_LoansAddedToFullLoanList() {
         
+        // Arrange
+        borrowBookControl.controlState = BorrowControlState.FINALISING;
+        borrowBookUI.uiState = BorrowUIState.FINALISING;
+        borrowBookControl.currentPatron = patron;
+        book.state = BookState.AVAILABLE; bookTwo.state = BookState.AVAILABLE;
+        Loan loan = new Loan(book, patron);
+        Loan loanTwo = new Loan(bookTwo, patron);
+        ILoan iLoan = loan; 
+        ILoan iLoanTwo = loanTwo;
+        borrowBookControl.pendingLoans.add(iLoan);
+        borrowBookControl.pendingLoans.add(iLoanTwo);
+        
+        
+        // Act
+        borrowBookControl.commitLoans();
+        
+        // Asserts
         assertFalse(library.loans.isEmpty());
         assertTrue(library.loans.containsValue(loan));
         assertTrue(library.loans.containsValue(loanTwo));
-        assertTrue(library.loans.containsKey(library.currentlyIssuingLoanId - 2));
-        assertTrue(library.loans.containsKey(library.currentlyIssuingLoanId - 1));
        
         assertFalse(patron.loans.isEmpty());
         assertTrue(patron.loans.containsValue(loan));
         assertTrue(patron.loans.containsValue(loanTwo));
-        assertTrue(patron.loans.containsKey(library.currentlyIssuingLoanId - 2));
-        assertTrue(patron.loans.containsKey(library.currentlyIssuingLoanId - 1));
       
         assertEquals(LoanState.CURRENT, loan.state);
         assertEquals(LoanState.CURRENT, loanTwo.state);
         
         assertEquals(BookState.ON_LOAN, book.state);
         assertEquals(BookState.ON_LOAN, bookTwo.state);
+
+    }
+
+    @Test
+    void commitLoans_HappyDay_LoansAddedToPatronBorrowingRecord() {
+        
+        // Arrange
+        borrowBookControl.controlState = BorrowControlState.FINALISING;
+        borrowBookUI.uiState = BorrowUIState.FINALISING;
+        borrowBookControl.currentPatron = patron;
+        book.state = BookState.AVAILABLE; bookTwo.state = BookState.AVAILABLE;
+        Loan loan = new Loan(book, patron);
+        Loan loanTwo = new Loan(bookTwo, patron);
+        ILoan iLoan = loan; 
+        ILoan iLoanTwo = loanTwo;
+        borrowBookControl.pendingLoans.add(iLoan);
+        borrowBookControl.pendingLoans.add(iLoanTwo);
         
         
+        // Act
+        borrowBookControl.commitLoans();
         
-        
-        
-        
+        // Asserts
+        assertFalse(patron.loans.isEmpty());
+        assertTrue(patron.loans.containsValue(loan));
+        assertTrue(patron.loans.containsValue(loanTwo));
         
     }
+    
+    @Test
+    void commitLoans_HappyDay_LoanStatesCurrent() {
+        
+        // Arrange
+        borrowBookControl.controlState = BorrowControlState.FINALISING;
+        borrowBookUI.uiState = BorrowUIState.FINALISING;
+        borrowBookControl.currentPatron = patron;
+        book.state = BookState.AVAILABLE; bookTwo.state = BookState.AVAILABLE;
+        Loan loan = new Loan(book, patron);
+        Loan loanTwo = new Loan(bookTwo, patron);
+        ILoan iLoan = loan; 
+        ILoan iLoanTwo = loanTwo;
+        borrowBookControl.pendingLoans.add(iLoan);
+        borrowBookControl.pendingLoans.add(iLoanTwo);
+        
+        
+        // Act
+        borrowBookControl.commitLoans();
+        
+        // Asserts
+        assertEquals(LoanState.CURRENT, loan.state);
+        assertEquals(LoanState.CURRENT, loanTwo.state);
+        
+    }
+    
+    @Test
+    void commitLoans_HappyDay_BookStatesOnLoan() {
+        
+        // Arrange
+        borrowBookControl.controlState = BorrowControlState.FINALISING;
+        borrowBookUI.uiState = BorrowUIState.FINALISING;
+        borrowBookControl.currentPatron = patron;
+        book.state = BookState.AVAILABLE; bookTwo.state = BookState.AVAILABLE;
+        Loan loan = new Loan(book, patron);
+        Loan loanTwo = new Loan(bookTwo, patron);
+        ILoan iLoan = loan; 
+        ILoan iLoanTwo = loanTwo;
+        borrowBookControl.pendingLoans.add(iLoan);
+        borrowBookControl.pendingLoans.add(iLoanTwo);
+        
+        
+        // Act
+        borrowBookControl.commitLoans();
+        
+        // Asserts
+        assertEquals(BookState.ON_LOAN, book.state);
+        assertEquals(BookState.ON_LOAN, bookTwo.state);
+        
+    }
+    
+    @Test
+    void commitLoans_UIStateNotFinalising_ExceptionThrown() {
+        
+        // Arrange
+        borrowBookControl.controlState = BorrowControlState.FINALISING;
+        borrowBookUI.uiState = BorrowUIState.SWIPING;
+        borrowBookControl.currentPatron = patron;
+        book.state = BookState.AVAILABLE; bookTwo.state = BookState.AVAILABLE;
+        Loan loan = new Loan(book, patron);
+        Loan loanTwo = new Loan(bookTwo, patron);
+        ILoan iLoan = loan; 
+        ILoan iLoanTwo = loanTwo;
+        borrowBookControl.pendingLoans.add(iLoan);
+        borrowBookControl.pendingLoans.add(iLoanTwo);
+        
+        
+        // Act
+        Executable e = () -> borrowBookControl.commitLoans();
+        
+        // Asserts
+        assertThrows(RuntimeException.class, e);
+        
+    }
+    
+    @Test
+    void commitLoans_CtrlStateNotFinalising_ExceptionThrown() {
+        
+        // Arrange
+        borrowBookControl.controlState = BorrowControlState.SWIPING;
+        borrowBookUI.uiState = BorrowUIState.FINALISING;
+        borrowBookControl.currentPatron = patron;
+        book.state = BookState.AVAILABLE; bookTwo.state = BookState.AVAILABLE;
+        Loan loan = new Loan(book, patron);
+        Loan loanTwo = new Loan(bookTwo, patron);
+        ILoan iLoan = loan; 
+        ILoan iLoanTwo = loanTwo;
+        borrowBookControl.pendingLoans.add(iLoan);
+        borrowBookControl.pendingLoans.add(iLoanTwo);
+        
+        
+        // Act
+        Executable e = () -> borrowBookControl.commitLoans();
+        
+        // Asserts
+        assertThrows(RuntimeException.class, e);
+        
+    }
+    
+    @Test
+    void commitLoans_NoReferenceToPatron_ExceptionThrown() {
+        
+        // Arrange
+        borrowBookControl.controlState = BorrowControlState.FINALISING;
+        borrowBookUI.uiState = BorrowUIState.FINALISING;
+        book.state = BookState.AVAILABLE; bookTwo.state = BookState.AVAILABLE;
+        Loan loan = new Loan(book, patron);
+        Loan loanTwo = new Loan(bookTwo, patron);
+        ILoan iLoan = loan; 
+        ILoan iLoanTwo = loanTwo;
+        borrowBookControl.pendingLoans.add(iLoan);
+        borrowBookControl.pendingLoans.add(iLoanTwo);
+        
+        
+        // Act
+        Executable e = () -> borrowBookControl.commitLoans();
+        
+        // Asserts
+        assertThrows(RuntimeException.class, e);
+        
+    }
+    
+    @Test
+    void commitLoans_NoPendingLoans_ExceptionThrown() {
+        
+        // Arrange
+        borrowBookControl.controlState = BorrowControlState.FINALISING;
+        borrowBookUI.uiState = BorrowUIState.FINALISING;
+        borrowBookControl.currentPatron = patron;
+        book.state = BookState.AVAILABLE; bookTwo.state = BookState.AVAILABLE;
+        Loan loan = new Loan(book, patron);
+        Loan loanTwo = new Loan(bookTwo, patron);
+        ILoan iLoan = loan; 
+        ILoan iLoanTwo = loanTwo;
+        
+        
+        // Act
+        Executable e = () -> borrowBookControl.commitLoans();
+        
+        // Asserts
+        assertThrows(RuntimeException.class, e);
+        
+    }
+    
+    @Test
+    void commitLoans_BooksAreNotAvailable_ExceptionThrown() {
+        
+        // Arrange
+        borrowBookControl.controlState = BorrowControlState.SWIPING;
+        borrowBookUI.uiState = BorrowUIState.FINALISING;
+        borrowBookControl.currentPatron = patron;
+        book.state = BookState.DAMAGED; bookTwo.state = BookState.DAMAGED;
+        Loan loan = new Loan(book, patron);
+        Loan loanTwo = new Loan(bookTwo, patron);
+        ILoan iLoan = loan; 
+        ILoan iLoanTwo = loanTwo;
+        borrowBookControl.pendingLoans.add(iLoan);
+        borrowBookControl.pendingLoans.add(iLoanTwo);
+        
+        
+        // Act
+        Executable e = () -> borrowBookControl.commitLoans();
+        
+        // Asserts
+        assertThrows(RuntimeException.class, e);
+    }
+     
 }
