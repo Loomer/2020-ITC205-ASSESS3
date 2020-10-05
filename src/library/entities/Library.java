@@ -17,7 +17,7 @@ public class Library implements Serializable, ILibrary {
 	
     private int currentlyIssuingBookId;
     private int currentlyIssuingPatronId;
-    int currentlyIssuingLoanId;
+    public int currentlyIssuingLoanId;
 	
     public Map<Integer, IBook> catalog;
     public Map<Integer, IPatron> patrons;

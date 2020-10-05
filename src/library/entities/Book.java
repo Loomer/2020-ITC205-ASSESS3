@@ -9,7 +9,7 @@ public class Book implements Serializable, IBook {
     String callNumber;
     int id;
 
-    BookState state;
+    public BookState state;
 
     
     public Book(String author, String title, String callNo, int id) {

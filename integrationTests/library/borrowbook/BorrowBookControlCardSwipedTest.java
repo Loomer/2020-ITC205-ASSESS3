@@ -211,7 +211,7 @@ class BorrowBookControlCardSwipedTest {
         // Arrange
         borrowBookControl.controlState = BorrowControlState.SWIPING;
         borrowBookUI.uiState = BorrowUIState.SWIPING;
-        patron.finesPayable = ILibrary.LOAN_LIMIT + 1;
+        patron.finesPayable = ILibrary.MAX_FINES_OWED + 1;
         library.patrons.put(patron.getId(), patron);
         
         // Act
