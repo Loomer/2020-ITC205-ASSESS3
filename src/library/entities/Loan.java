@@ -6,11 +6,11 @@ import java.util.Date;
 @SuppressWarnings("serial")
 public class Loan implements Serializable, ILoan {
 
-    private int loanId;
-    private IBook book;
-    private IPatron patron;
-    private Date dueDate;
-    private LoanState state;
+    int loanId;
+    IBook book;
+    IPatron patron;
+    Date dueDate;
+    public LoanState state;
 
     
     public Loan(IBook book, IPatron patron) {

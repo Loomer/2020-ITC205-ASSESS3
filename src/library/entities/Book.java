@@ -4,12 +4,12 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class Book implements Serializable, IBook {
 
-    private String title;
-    private String author;
-    private String callNumber;
-    private int id;
+    String title;
+    String author;
+    String callNumber;
+    int id;
 
-    private BookState state;
+    public BookState state;
 
     
     public Book(String author, String title, String callNo, int id) {
