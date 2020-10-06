@@ -88,22 +88,20 @@ class BorrowBookControlCardSwipedTest {
         
         
         
-        //iborrowBookUI
+
         iLibrary = library;
-        //currentPatron;
-        //controlState
+
         pendingLoans = new ArrayList<>();
-        //currentBook
+
         
         borrowBookControl = new BorrowBookControl(iLibrary);
-        //borrowBookControl.controlState = controlState.INITIALISED;
+
         
         iBorrowBookControl = borrowBookControl;
         
         
         borrowBookUI = new BorrowBookUI(iBorrowBookControl);
-        //iBorrowBookUI = borrowBookUI;
-        //borrowBookControl.borrowBookUI = iBorrowBookUI;
+
         
         
         

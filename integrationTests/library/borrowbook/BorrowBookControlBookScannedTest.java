@@ -89,26 +89,21 @@ class BorrowBookControlBookScannedTest {
         library.currentLoans = currentLoans;
         library.damagedBooks = damagedBooks;
         
+       
         
-        
-        //iborrowBookUI
         iLibrary = library;
-        //currentPatron;
-        //controlState
+
         pendingLoans = new ArrayList<>();
-        //currentBook
-        
+
         borrowBookControl = new BorrowBookControl(iLibrary);
-        //borrowBookControl.controlState = controlState.INITIALISED;
+
         borrowBookControl.pendingLoans = pendingLoans;
         
         iBorrowBookControl = borrowBookControl;
         
         
         borrowBookUI = new BorrowBookUI(iBorrowBookControl);
-        //iBorrowBookUI = borrowBookUI;
-        //borrowBookControl.borrowBookUI = iBorrowBookUI;
-        
+
         
         
     }
@@ -148,14 +143,11 @@ class BorrowBookControlBookScannedTest {
         borrowBookControl.controlState = BorrowControlState.SCANNING;
         borrowBookUI.uiState = BorrowUIState.SCANNING;
         borrowBookControl.pendingLoans.add(mockLoan1);
-        //borrowBookControl.pendingLoans.add(mockLoan2);
         borrowBookControl.currentPatron = patron;
         library.catalog.put(book.getId(), book);
         
         when(mockLoan1.getBook()).thenReturn(mockBook2);
-        //when(mockLoan2.getBook()).thenReturn(mockBook3);
-        
-        
+           
         IBook expectedBook = book;
         IPatron expectedPatron = patron;
         

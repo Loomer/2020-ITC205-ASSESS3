@@ -7,8 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -58,7 +56,6 @@ class BorrowBookControlCommitLoansTest {
     
     
     BorrowBookUI borrowBookUI; IBorrowBookUI iBorrowBookUI;
-    // Scanner input;
     BorrowUIState uiState;
 
     @BeforeAll
@@ -87,26 +84,19 @@ class BorrowBookControlCommitLoansTest {
         library.currentLoans = currentLoans;
         library.damagedBooks = damagedBooks;
         
-        
-        
-        //iborrowBookUI
         iLibrary = library;
-        //currentPatron;
-        //controlState
         pendingLoans = new ArrayList<>();
-        //currentBook
+
         
         borrowBookControl = new BorrowBookControl(iLibrary);
-        //borrowBookControl.controlState = controlState.INITIALISED;
+;
         borrowBookControl.pendingLoans = pendingLoans;
         
         iBorrowBookControl = borrowBookControl;
         
         
         borrowBookUI = new BorrowBookUI(iBorrowBookControl);
-        //iBorrowBookUI = borrowBookUI;
-        //borrowBookControl.borrowBookUI = iBorrowBookUI;
-        
+
         
         
     }
